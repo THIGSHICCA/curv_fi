@@ -60,7 +60,7 @@ export default function AuthForm({ isLogin }: AuthFormProps) {
   };
 
   return (
-    <div className="p-8 rounded-3xl max-w-md mx-auto">
+    <div className="p-8 rounded-3xl max-w-md mx-auto ">
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && <p className="text-red-400">{error}</p>}
 
