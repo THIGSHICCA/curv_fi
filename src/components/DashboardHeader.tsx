@@ -23,10 +23,14 @@ const DashboardHeaderMinimal: React.FC<DashboardHeaderMinimalProps> = ({
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        let data: any = { credits: 0 };
+        interface CreditResponse {
+          coins: number;
+        }
+
+        let data: CreditResponse = { coins: 0 };
         if (res.ok) {
           try {
-            data = await res.json();
+            data = (await res.json()) as CreditResponse;
           } catch {
             console.warn("Failed to parse JSON from /api/credit");
           }

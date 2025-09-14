@@ -12,8 +12,10 @@ const BudgetPlaceholder: React.FC = () => {
       </h3>
       <p className="text-viridian-700 dark:text-gray-200 mb-6">
         Fill in the details on the left and click{" "}
-        <span className="font-semibold">"Generate Financial Plan"</span> to get
-        a detailed breakdown.
+        <span className="font-semibold">
+          &ldquo;Generate Financial Plan&rdquo;
+        </span>{" "}
+        to get a detailed breakdown.
       </p>
 
       <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-sm text-viridian-800 dark:text-gray-100 w-full max-w-md">

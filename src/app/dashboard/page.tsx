@@ -20,7 +20,20 @@ export default function DashboardPage() {
     agencyCountry: "",
     clientCountry: "",
   });
-  const [budgetOutput, setBudgetOutput] = useState<any>(null);
+
+  interface BudgetOutput {
+    total_budget: { min: number; max: number };
+    allocation_breakdown: Array<{
+      category: string;
+      amount: { min: number; max: number };
+      percentage: number;
+    }>;
+    fundManagement: string; // ✅ string, not Record<string, any>
+    clientCurrency: string;
+    suggested_team_size: number;
+  }
+
+  const [budgetOutput, setBudgetOutput] = useState<BudgetOutput | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Effect
@@ -83,7 +96,7 @@ export default function DashboardPage() {
             onGenerate={handleGenerateBudget}
           />
 
-          <div className="flex-1 flex flex-col gap-4">
+          <div className="flex-1  flex flex-col gap-4">
             <DashboardHeaderMinimal onLogout={handleLogout} />
 
             {!showBudget && <BudgetPlaceholder />}
