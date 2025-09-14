@@ -7,7 +7,7 @@ export default function CTA() {
   const router = useRouter();
 
   return (
-    <section className="relative bg-gradient-to-r from-emerald-500 to-emerald-700 py-20 px-6 text-center text-white">
+    <section className="relative bg-white/10 backdrop-blur-lg border border-white/20 shadow-2xl py-20 px-6 text-center text-emerald-700">
       <motion.h2
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -21,7 +21,8 @@ export default function CTA() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => router.push("/auth")}
-        className="bg-white text-emerald-700 font-semibold px-8 py-4 rounded-xl shadow-lg hover:bg-emerald-100 transition-all">
+        className="bg-gradient-to-r from-white/50 via-[var(--color-viridian-300)] to-[var(--color-viridian-400)] 
+            text-[var(--color-viridian-950)] font-semibold px-8 py-4 rounded-xl shadow-lg transition-all">
         Get Started Free
       </motion.button>
     </section>

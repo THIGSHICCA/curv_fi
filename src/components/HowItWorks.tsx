@@ -32,31 +32,35 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="py-20 px-6 max-w-6xl mx-auto relative">
+    <section className="md:py-30 py-10 px-6 max-w-6xl mx-auto relative">
       <h2 className="text-4xl font-bold text-center mb-16 text-viridian-50">
         How It Works
       </h2>
-      <div className="flex flex-col gap-12 md:gap-20">
+
+      <div className="relative flex flex-col gap-12 md:gap-16">
         {steps.map((step, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: index * 0.2 }}
-            className={`flex flex-col md:flex-row items-center ${
-              index % 2 !== 0 ? "md:flex-row-reverse" : ""
-            }`}>
-            <div className="relative z-10 p-8 rounded-3xl shadow-xl bg-viridian-100/30 backdrop-blur-md max-w-md">
+          <div key={index} className="relative flex flex-col items-center">
+            {/* Connector Line (except last step) */}
+            {index !== steps.length - 1 && (
+              <div className="hidden md:block absolute left-1/2 top-full w-0.5 h-16 bg-gradient-to-b from-viridian-400/40 to-viridian-600/30" />
+            )}
+
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: index * 0.2 }}
+              className="relative z-10 p-8 rounded-3xl bg-gradient-to-br from-viridian-950/60 to-viridian-800/40 backdrop-blur-lg border border-white/10 shadow-xl max-w-md"
+            >
               <div className="flex items-center gap-4 mb-4">
-                <step.icon className="w-8 h-8 text-viridian-400" />
+                <step.icon className="w-10 h-10 text-viridian-400" />
                 <h3 className="text-xl font-semibold text-viridian-50">
                   {step.title}
                 </h3>
               </div>
               <p className="text-viridian-50/80">{step.description}</p>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         ))}
       </div>
     </section>

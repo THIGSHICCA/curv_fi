@@ -1,5 +1,5 @@
 import Hero from "@/components/Hero";
-import WhyCurvFi from "@/components/WhyCurvFi";
+//import WhyCurvFi from "@/components/WhyCurvFi";
 import UseCases from "@/components/UseCases";
 import HowItWorks from "@/components/HowItWorks";
 import FAQ from "@/components/FAQ";
@@ -16,7 +16,7 @@ export default function Page() {
       {/* All content on top */}
       <div className="relative z-10">
         <Hero />
-        <WhyCurvFi />
+        {/* <WhyCurvFi /> */}
         <UseCases />
         <HowItWorks />
         <FAQ />

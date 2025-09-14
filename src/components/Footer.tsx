@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer className="py-10 px-6 border-t border-gray-800 text-center text-gray-400">
       <p>© {new Date().getFullYear()} YourBrand. All rights reserved.</p>
-      <div className="mt-4 space-x-4">
+      <div className="mt-4 space-x-4 text-right">
         <a href="/about" className="hover:text-emerald-400">
           About
         </a>

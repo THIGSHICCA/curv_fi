@@ -2,67 +2,92 @@
 
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { FaUsers } from "react-icons/fa";
 
 export default function Hero() {
   const router = useRouter();
 
+  const finalCount = 120; // Final active users
+  const [count, setCount] = useState(0);
+
+  // Animate number on mount
+  useEffect(() => {
+    let start = 0;
+    const duration = 2000; // 2 seconds
+    const increment = finalCount / (duration / 16); // approx 60fps
+
+    const interval = setInterval(() => {
+      start += increment;
+      if (start >= finalCount) {
+        start = finalCount;
+        clearInterval(interval);
+      }
+      setCount(Math.floor(start));
+    }, 16);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-20  ">
-      {/* Gradient arch background */}
-      {/* <motion.div
-        animate={{ rotate: [0, 10, -10, 0] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-32 w-[160%] h-[90%] left-[-30%] rounded-full bg-gradient-to-b from-emerald-400 via-emerald-600 to-viridian-950 opacity-60 blur-3xl z-0"></motion.div>
-
-
-      <motion.div
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-10 left-1/4 w-36 h-36 bg-emerald-300/20 rounded-full blur-2xl z-0"></motion.div>
-      <motion.div
-        animate={{ y: [0, 25, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-20 right-1/4 w-48 h-48 bg-emerald-400/20 rounded-full blur-2xl z-0"></motion.div> */}
+    <section className="container mx-auto relative flex flex-col items-start justify-center px-16 py-20">
 
       {/* Heading */}
       <motion.h1
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="relative text-5xl md:text-6xl font-extrabold leading-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-emerald-200 z-10">
-        AI-Powered Workflow <br /> Solutions for{" "}
-        <span className="text-emerald-300">Modern Teams</span>
+        className="w-full text-center text-5xl md:text-[190pt] text-[50pt] font-extrabold leading-tight mb-16
+          bg-clip-text text-transparent bg-gradient-to-r from-white via-[var(--color-viridian-100)] to-[var(--color-viridian-400)]"
+      >
+        CURV FI
       </motion.h1>
 
-      {/* Subheading */}
-      <motion.p
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.5, duration: 1 }}
-        className="relative text-lg md:text-xl text-viridian-50 max-w-2xl mb-10 z-10">
-        Automate repetitive tasks, optimize collaboration, and make smarter
-        decisions with our next-gen AI platform built for businesses of all
-        sizes.
-      </motion.p>
+      {/* Subheading and Button */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 1 }}
+        className="max-w-2xl flex flex-col md:items-start items-center"
+      >
+        <p className="text-lg text-center  sm:text-left md:text-xl text-[var(--color-viridian-100)] mb-6">
+          Automate repetitive tasks, optimize collaboration, and make smarter
+          decisions with our next-gen AI platform built for businesses of all sizes.
+        </p>
 
-      {/* CTA */}
-      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 z-10">
         <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 1 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => router.push("/auth")}
-          className="bg-emerald-400 hover:bg-emerald-500 text-viridian-950 font-semibold px-6 py-4 rounded-xl rounded-br-3xl shadow-lg transition-all">
+          className="bg-gradient-to-r from-white/80 via-[var(--color-viridian-300)] to-[var(--color-viridian-400)] 
+            text-[var(--color-viridian-950)] font-semibold px-8 py-4 rounded-xl shadow-lg transition-all"
+        >
           Start Free Trial
         </motion.button>
+      </motion.div>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => router.push("/auth")}
-          className="border border-emerald-400 text-viridian-50 hover:text-white hover:border-emerald-200 px-6 py-4 rounded-xl shadow-lg transition-all">
-          Login
-        </motion.button>
-      </div>
+      {/* Active User Count (Right Side) */}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.7, duration: 1 }}
+        className="mt-12 w-full flex justify-center sm:justify-end"
+      >
+        <div className="flex flex-col items-center gap-1 text-[var(--color-viridian-100)] font-bold">
+          {/* Number with Icon */}
+          <div className="flex items-center gap-2 text-3xl md:text-5xl">
+            <FaUsers className="text-[var(--color-viridian-300)] text-3xl md:text-5xl" />
+            <span>{count}+</span>
+          </div>
+
+          {/* Label */}
+          <span className="text-lg md:text-2xl">Active Users</span>
+        </div>
+      </motion.div>
+
     </section>
   );
 }
