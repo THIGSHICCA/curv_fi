@@ -24,7 +24,7 @@ interface BudgetInputProps {
     }>
   >;
   onGenerate: () => void;
-  shrink?: boolean; // control width
+  shrink?: boolean;
 }
 
 const BudgetInput: React.FC<BudgetInputProps> = ({
@@ -33,118 +33,128 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   onGenerate,
   shrink = false,
 }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
-    <div
-      className={`
-        bg-white text-black p-6 rounded-lg shadow-md
-        transition-all duration-500
-        ${shrink ? 'w-full md:w-1/2' : 'w-full'}
-      `}
-    >
-      <h2 className="text-2xl font-bold mb-4 text-center md:text-left">
-        Agency Budget Inputs
-      </h2>
-
-      {/* Row 1: Avg Income & Expenses */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-        <div className="flex flex-col">
-          <label className="mb-1 font-medium">Average Annual Income (Optional)</label>
-          <input
-            type="number"
-            name="avgIncome"
-            className="p-2 border rounded w-full"
-            value={formData.avgIncome || ''}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="mb-1 font-medium">Average Annual Expenses (Optional)</label>
-          <input
-            type="number"
-            name="avgExpenses"
-            className="p-2 border rounded w-full"
-            value={formData.avgExpenses || ''}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
-
-      {/* Row 2: Requirements */}
-      <div className="mb-3">
-        <label className="mb-1 font-medium block">Requirements</label>
-        <textarea
-          name="requirements"
-          className="p-2 border rounded w-full"
-          rows={4}
-          value={formData.requirements || ''}
-          onChange={handleChange}
-          placeholder="Describe the client or project requirements"
-        />
-      </div>
-
-      {/* Row 3: Duration & Budget Currency */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-        <div className="flex flex-col">
-          <label className="mb-1 font-medium">Expected Duration (weeks)</label>
-          <input
-            type="number"
-            name="durationWeeks"
-            className="p-2 border rounded w-full"
-            value={formData.durationWeeks || ''}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="mb-1 font-medium">Budget Currency</label>
-          <select
-            name="budgetCurrency"
-            value={formData.budgetCurrency || ''}
-            onChange={handleChange}
-            className="p-2 border rounded w-full"
-          >
-            <option value="">Select Budget Currency</option>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="GBP">GBP</option>
-            <option value="INR">INR</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Row 4: Agency Country & Client Country */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-        <div className="flex flex-col">
-          <label className="mb-1 font-medium">Agency Country</label>
-          <input
-            type="text"
-            name="agencyCountry"
-            className="p-2 border rounded w-full"
-            value={formData.agencyCountry || ''}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="mb-1 font-medium">Client Country</label>
-          <input
-            type="text"
-            name="clientCountry"
-            className="p-2 border rounded w-full"
-            value={formData.clientCountry || ''}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
-
-      <button
-        className="bg-blue-600 text-white px-4 py-2 rounded w-full mt-4 hover:bg-blue-700"
-        onClick={onGenerate}
+    <div className="flex items-center justify-center mx-20">
+      {/* Card */}
+      <div
+        className="bg-gradient-to-br from-viridian-50 to-viridian-200 text-gray-200  p-10 md:p-12 rounded-3xl shadow-2xl border border-gray-200 
+        transition-all duration-500 "
+        
       >
-        Generate Financial Plan
-      </button>
+        <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-center text-viridian-900">
+          Agency Budget Inputs
+        </h2>
+
+        {/* Avg Income & Expenses */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2 ">
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">
+              Average Annual Income (Optional)
+            </label>
+            <input
+              type="number"
+              name="avgIncome"
+              value={formData.avgIncome || ''}
+              onChange={handleChange}
+              className="p-3 text-base border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">
+              Average Annual Expenses (Optional)
+            </label>
+            <input
+              type="number"
+              name="avgExpenses"
+              value={formData.avgExpenses || ''}
+              onChange={handleChange}
+              className="p-3 text-base border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+            />
+          </div>
+        </div>
+
+        {/* Requirements */}
+        <div className="mb-2 flex flex-col">
+          <label className="mb-2 text-sm font-medium text-gray-700 ">Requirements</label>
+          <textarea
+            name="requirements"
+            value={formData.requirements || ''}
+            onChange={handleChange}
+            rows={3}
+            className="p-2 text-gray-700 border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full resize-y"
+            placeholder="Describe the client or project requirements"
+          />
+        </div>
+
+        {/* Duration & Currency */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">Expected Duration (weeks)</label>
+            <input
+              type="number"
+              name="durationWeeks"
+              value={formData.durationWeeks || ''}
+              onChange={handleChange}
+              className="p-3 text-base border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">Budget Currency</label>
+            <select
+              name="budgetCurrency"
+              value={formData.budgetCurrency || ''}
+              onChange={handleChange}
+              className="p-3 text-gray-700 border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+            >
+              <option value=""></option>
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="INR">INR</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Countries */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-5">
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">Agency Country</label>
+            <input
+              type="text"
+              name="agencyCountry"
+              value={formData.agencyCountry || ''}
+              onChange={handleChange}
+              className="p-3 text-base border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-700">Client Country</label>
+            <input
+              type="text"
+              name="clientCountry"
+              value={formData.clientCountry || ''}
+              onChange={handleChange}
+              className="p-3 text-base border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+            />
+          </div>
+        </div>
+
+        <button
+          className="bg-viridian-600 hover:bg-viridian-700 text-white font-semibold py-1 rounded-xl w-full transition-colors shadow-md text-lg"
+          onClick={onGenerate}
+        >
+          Generate Financial Plan
+        </button>
+      </div>
     </div>
   );
 };
