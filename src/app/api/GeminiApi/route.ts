@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+import { verify } from "jsonwebtoken";
+import { checkCoins } from "@/lib/auth";
+// import { GEMINI_API_KEY } from "@/lib/constants"; // if you store it somewhere
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
@@ -37,6 +40,31 @@ function getRoundedRange(value: number, percent: number = 5) {
 
 export async function POST(req: NextRequest) {
   try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader)
+      return NextResponse.json({ error: "No token" }, { status: 401 });
+
+    const token = authHeader.split(" ")[1];
+    if (!token)
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+
+    let userId: string;
+    try {
+      const decoded: any = verify(
+        token,
+        process.env.JWT_SECRET || "supersecret"
+      );
+      userId = decoded.id;
+    } catch {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+
+    // ✅ Check and decrement coin
+    try {
+      await checkCoins(userId); // will throw if no coins left
+    } catch (err: any) {
+      return NextResponse.json({ error: err.message }, { status: 403 });
+    }
     const body = await req.json();
     const {
       projectRequirement,
