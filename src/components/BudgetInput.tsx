@@ -40,10 +40,10 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center mx-20">
+    <div className="flex items-center justify-center mx-auto md:mx-10 md:py-20">
       {/* Card */}
       <div
-        className="bg-gradient-to-br from-viridian-50 to-viridian-200 text-gray-200  p-10 md:p-12 rounded-3xl shadow-2xl border border-gray-200 
+        className="bg-gradient-to-br from-viridian-50 to-viridian-200 text-gray-200  p-4 md:p-12 rounded-3xl shadow-2xl border border-gray-200 
         transition-all duration-500 "
         
       >
@@ -62,7 +62,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               name="avgIncome"
               value={formData.avgIncome || ''}
               onChange={handleChange}
-              className="p-3 text-base border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
             />
           </div>
 
@@ -75,7 +75,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               name="avgExpenses"
               value={formData.avgExpenses || ''}
               onChange={handleChange}
-              className="p-3 text-base border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+              className="p-3 text-black border border-gray-700 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
             />
           </div>
         </div>
@@ -88,7 +88,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
             value={formData.requirements || ''}
             onChange={handleChange}
             rows={3}
-            className="p-2 text-gray-700 border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full resize-y"
+            className="p-2 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full resize-y"
             placeholder="Describe the client or project requirements"
           />
         </div>
@@ -102,7 +102,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               name="durationWeeks"
               value={formData.durationWeeks || ''}
               onChange={handleChange}
-              className="p-3 text-base border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
             />
           </div>
 
@@ -112,7 +112,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               name="budgetCurrency"
               value={formData.budgetCurrency || ''}
               onChange={handleChange}
-              className="p-3 text-gray-700 border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
             >
               <option value=""></option>
               <option value="USD">USD</option>
@@ -132,7 +132,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               name="agencyCountry"
               value={formData.agencyCountry || ''}
               onChange={handleChange}
-              className="p-3 text-base border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
             />
           </div>
 
@@ -143,7 +143,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               name="clientCountry"
               value={formData.clientCountry || ''}
               onChange={handleChange}
-              className="p-3 text-base border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
             />
           </div>
         </div>

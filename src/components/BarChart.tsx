@@ -59,7 +59,7 @@ const BudgetBarChart: React.FC<BudgetBarChartProps> = ({
 
       <ResponsiveContainer width="100%" height={chartHeight}>
         
-        <BarChart
+        <BarChart 
 
           data={chartData}
           layout="vertical"
@@ -85,8 +85,10 @@ const BudgetBarChart: React.FC<BudgetBarChartProps> = ({
           <Legend verticalAlign="top" height={36} />
 
           {/* Bars */}
+          
           <Bar dataKey="min" stackId="a" fill="#16a34a" name="Minimum" />
           <Bar dataKey="extra" stackId="a" fill="#a7f3d0" name="Extra (Min→Max)" radius={[0, 10, 10, 0]} />
+          
         </BarChart>
       </ResponsiveContainer>
       
