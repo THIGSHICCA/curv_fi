@@ -50,10 +50,12 @@ export default function AuthForm({ isLogin }: AuthFormProps) {
         setCoins(data.coins);
         router.push("/dashboard");
       }
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Something went wrong");
+      }
     }
   };
 

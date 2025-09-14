@@ -26,7 +26,7 @@ export default function AuthPage() {
         <div className="mt-4 text-center text-emerald-900">
           {isLogin ? (
             <p>
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <button
                 className="underline font-semibold hover:text-emerald-700 transition-colors"
                 onClick={() => setIsLogin(false)}>

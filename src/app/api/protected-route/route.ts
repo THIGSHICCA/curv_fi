@@ -13,7 +13,13 @@ export async function POST(req: NextRequest) {
       message: "Request successful",
       remainingCoins,
     });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 403 });
+  } catch (err: unknown) {
+    let errorMessage = "Unknown error";
+
+    if (err instanceof Error) {
+      errorMessage = err.message;
+    }
+
+    return NextResponse.json({ error: errorMessage }, { status: 403 });
   }
 }

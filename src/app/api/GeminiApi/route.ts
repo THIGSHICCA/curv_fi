@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
 import { verify } from "jsonwebtoken";
 import { checkCoins } from "@/lib/auth";
 // import { GEMINI_API_KEY } from "@/lib/constants"; // if you store it somewhere
@@ -50,11 +49,15 @@ export async function POST(req: NextRequest) {
 
     let userId: string;
     try {
-      const decoded: any = verify(
+      const decoded: unknown = verify(
         token,
         process.env.JWT_SECRET || "supersecret"
       );
-      userId = decoded.id;
+      if (typeof decoded === "object" && decoded !== null && "id" in decoded) {
+        userId = (decoded as { id: string }).id;
+      } else {
+        return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      }
     } catch {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
@@ -62,8 +65,9 @@ export async function POST(req: NextRequest) {
     // ✅ Check and decrement coin
     try {
       await checkCoins(userId); // will throw if no coins left
-    } catch (err: any) {
-      return NextResponse.json({ error: err.message }, { status: 403 });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Forbidden";
+      return NextResponse.json({ error: errorMessage }, { status: 403 });
     }
     const body = await req.json();
     const {
@@ -116,18 +120,28 @@ Output JSON format:
         ?.replace(/```json|```/g, "")
         .trim() || "{}";
 
-    let aiJson: any;
+    type EstimatedHours = {
+      frontend: number;
+      backend: number;
+      pm: number;
+      qa: number;
+    };
+    type AIResponse = {
+      project_size: "small" | "medium" | "large";
+      estimated_hours: EstimatedHours;
+    };
+
+    let aiJson: AIResponse;
     try {
       aiJson = JSON.parse(aiText);
     } catch {
-      // fallback for beginner small project
       aiJson = {
         project_size: "small",
         estimated_hours: { frontend: 20, backend: 10, pm: 5, qa: 5 },
       };
     }
 
-    const hours = aiJson.estimated_hours;
+    const hours: EstimatedHours = aiJson.estimated_hours;
     const projectSize = aiJson.project_size;
 
     // 2️⃣ Budget calculation in agency currency
@@ -182,7 +196,8 @@ Output JSON format:
     );
 
     const allocationBreakdown = DEFAULT_CATEGORIES.map((cat) => {
-      let amount: any;
+      type Range = { min: number; max: number };
+      let amount: Range = { min: 0, max: 0 };
       let percent = 0;
       switch (cat) {
         case "Salaries":

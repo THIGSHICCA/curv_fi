@@ -15,8 +15,32 @@ export default function DashboardPage() {
     agencyCountry: "",
     clientCountry: "",
   });
+  type BudgetRange = { min: number; max: number };
 
-  const [budgetOutput, setBudgetOutput] = useState<any>(null);
+  type AllocationItem = {
+    category: string;
+    amount: BudgetRange;
+    percentage: number;
+  };
+
+  type BudgetOutput = {
+    projectRequirement: string;
+    agencyCountry: string;
+    clientCountry: string;
+    clientCurrency: string;
+    project_size: "small" | "medium" | "large";
+    suggested_team_size: number;
+    total_budget: BudgetRange;
+    labor_cost: BudgetRange;
+    overhead: BudgetRange;
+    contingency: BudgetRange;
+    profit: BudgetRange;
+    allocation_breakdown: AllocationItem[];
+    fundManagement: string;
+  };
+
+  const [budgetOutput, setBudgetOutput] = useState<BudgetOutput | null>(null);
+
   const [loading, setLoading] = useState(false);
 
   const handleGenerateBudget = async () => {

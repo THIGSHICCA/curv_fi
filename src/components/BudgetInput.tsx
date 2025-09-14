@@ -26,7 +26,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   formData,
   setFormData,
   onGenerate,
-  shrink = false,
+  // shrink = false,
 }) => {
   // Handle input changes
   const handleChange = (
