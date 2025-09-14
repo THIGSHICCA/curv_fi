@@ -1,8 +1,11 @@
 "use client";
-
 import { useState } from "react";
+import BackgroundEffects from "@/components/BackgroundEffect";
 import BudgetInput from "@/components/BudgetInput";
 import BudgetVisualization from "@/components/GeneratedBudget";
+import DashboardHeaderMinimal from "@/components/DashboardHeader";
+import BudgetPlaceholder from "@/components/BudgetPlaceholder";
+import { FullscreenLoader } from "@/components/Loader"; // import loader
 
 export default function DashboardPage() {
   const [showBudget, setShowBudget] = useState(false);
@@ -11,45 +14,17 @@ export default function DashboardPage() {
     durationWeeks: "",
     avgIncome: "",
     avgExpenses: "",
-    budgetCurrency: "", // client currency
+    budgetCurrency: "",
     agencyCountry: "",
     clientCountry: "",
   });
-  type BudgetRange = { min: number; max: number };
-
-  type AllocationItem = {
-    category: string;
-    amount: BudgetRange;
-    percentage: number;
-  };
-
-  type BudgetOutput = {
-    projectRequirement: string;
-    agencyCountry: string;
-    clientCountry: string;
-    clientCurrency: string;
-    project_size: "small" | "medium" | "large";
-    suggested_team_size: number;
-    total_budget: BudgetRange;
-    labor_cost: BudgetRange;
-    overhead: BudgetRange;
-    contingency: BudgetRange;
-    profit: BudgetRange;
-    allocation_breakdown: AllocationItem[];
-    fundManagement: string;
-  };
-
-  const [budgetOutput, setBudgetOutput] = useState<BudgetOutput | null>(null);
-
+  const [budgetOutput, setBudgetOutput] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const handleGenerateBudget = async () => {
     setLoading(true);
-
     try {
       const token = localStorage.getItem("token");
-
-      // Map frontend formData to backend expected format
       const payload = {
         projectRequirement: formData.requirements,
         agencyCountry: formData.agencyCountry,
@@ -67,7 +42,6 @@ export default function DashboardPage() {
       });
 
       const data = await res.json();
-
       if (res.ok) {
         setBudgetOutput(data);
         setShowBudget(true);
@@ -82,28 +56,45 @@ export default function DashboardPage() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  };
+
   return (
-    <div className="min-h-screen bg-viridian-50 p-6 md:p-10 transition-all duration-500">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-center">
-        <BudgetInput
-          formData={formData}
-          setFormData={setFormData}
-          onGenerate={handleGenerateBudget}
-          shrink={showBudget}
-        />
+    <div>
+      <BackgroundEffects />
 
-        {loading && (
-          <p className="text-lg text-center">Calculating budget...</p>
-        )}
-
-        {showBudget && budgetOutput && (
-          <BudgetVisualization
-            total_budget={budgetOutput.total_budget}
-            allocation_breakdown={budgetOutput.allocation_breakdown}
-            fundManagement={budgetOutput.fundManagement}
-            clientCurrency={budgetOutput.clientCurrency}
+      <div className="min-h-screen z-10 items-center py-10 transition-all duration-500 relative">
+        <div className="container mx-auto flex flex-col md:flex-row gap-6">
+          {/* Left Side: Input */}
+          <BudgetInput
+            formData={formData}
+            setFormData={setFormData}
+            onGenerate={handleGenerateBudget}
           />
-        )}
+
+          {/* Right Side: Header + Output */}
+          <div className="flex-1 flex flex-col gap-4">
+            <DashboardHeaderMinimal onLogout={handleLogout} />
+
+            {/* Show states */}
+            {!showBudget && <BudgetPlaceholder />}
+
+            {showBudget && budgetOutput && (
+              <BudgetVisualization
+                total_budget={budgetOutput.total_budget}
+                allocation_breakdown={budgetOutput.allocation_breakdown}
+                fundManagement={budgetOutput.fundManagement}
+                clientCurrency={budgetOutput.clientCurrency}
+                suggested_team_size={budgetOutput.suggested_team_size} // ✅ from backend
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Fullscreen Loader Overlay */}
+        {loading && <FullscreenLoader message="Calculating budget..." />}
       </div>
     </div>
   );

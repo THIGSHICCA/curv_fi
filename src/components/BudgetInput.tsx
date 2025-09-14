@@ -2,7 +2,6 @@
 
 import React from "react";
 
-// 1️⃣ Define the full form data type
 export interface FormData {
   requirements: string;
   durationWeeks: string;
@@ -13,7 +12,6 @@ export interface FormData {
   clientCountry: string;
 }
 
-// 2️⃣ Props for BudgetInput
 interface BudgetInputProps {
   formData: FormData;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
@@ -21,14 +19,11 @@ interface BudgetInputProps {
   shrink?: boolean;
 }
 
-// 3️⃣ Component
 const BudgetInput: React.FC<BudgetInputProps> = ({
   formData,
   setFormData,
   onGenerate,
-  // shrink = false,
 }) => {
-  // Handle input changes
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -38,82 +33,45 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center mx-auto md:mx-10 md:py-20">
+    <div className="flex justify-center mx-auto">
       <div
-        className="bg-gradient-to-br from-viridian-50 to-viridian-200 text-gray-200 p-4 md:p-12 rounded-3xl shadow-2xl border border-gray-200 
-        transition-all duration-500">
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-center text-viridian-900">
-          Agency Budget Inputs
+        className="bg-white/10 backdrop-blur-lg border border-white/20 
+        p-8 md:p-10 rounded-3xl shadow-xl w-full transition-all duration-500">
+        <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-center text-viridian-900 dark:text-white">
+          Budget Inputs
         </h2>
 
-        {/* Avg Income & Expenses */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">
-              Average Annual Income (Optional)
-            </label>
-            <input
-              type="number"
-              name="avgIncome"
-              value={formData.avgIncome}
-              onChange={handleChange}
-              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">
-              Average Annual Expenses (Optional)
-            </label>
-            <input
-              type="number"
-              name="avgExpenses"
-              value={formData.avgExpenses}
-              onChange={handleChange}
-              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
-            />
-          </div>
-        </div>
-
         {/* Requirements */}
-        <div className="mb-2 flex flex-col">
-          <label className="mb-2 text-sm font-medium text-gray-700">
+        <div className="mb-6 flex flex-col">
+          <label className="mb-2 text-sm font-medium text-viridian-800 dark:text-gray-200">
             Requirements
           </label>
           <textarea
             name="requirements"
             value={formData.requirements}
             onChange={handleChange}
-            rows={3}
-            className="p-2 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full resize-y"
+            rows={20}
             placeholder="Describe the client or project requirements"
+            className="p-3 text-viridian-900 dark:text-white bg-white/0 backdrop-blur-sm 
+              border border-white/20 rounded-xl focus:border-viridian-500 focus:ring-2 
+              focus:ring-viridian-200 transition w-full resize-y"
           />
         </div>
 
-        {/* Duration & Currency */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+        {/* 3 Inputs per line */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {/* Budget Currency */}
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">
-              Expected Duration (weeks)
-            </label>
-            <input
-              type="number"
-              name="durationWeeks"
-              value={formData.durationWeeks}
-              onChange={handleChange}
-              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">
+            <label className="mb-2 text-sm font-medium text-viridian-800 dark:text-gray-200">
               Budget Currency
             </label>
             <select
               name="budgetCurrency"
               value={formData.budgetCurrency}
               onChange={handleChange}
-              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full">
+              className="p-3 text-viridian-900 dark:text-white bg-white/0 backdrop-blur-sm 
+                border border-white/20 rounded-xl focus:border-viridian-500 
+                focus:ring-2 focus:ring-viridian-200 transition w-full">
               <option value="">Select currency</option>
               <option value="USD">USD</option>
               <option value="LKR">LKR</option>
@@ -122,12 +80,10 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               <option value="INR">INR</option>
             </select>
           </div>
-        </div>
 
-        {/* Countries */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-5">
+          {/* Agency Country */}
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">
+            <label className="mb-2 text-sm font-medium text-viridian-800 dark:text-gray-200">
               Agency Country
             </label>
             <input
@@ -135,12 +91,16 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               name="agencyCountry"
               value={formData.agencyCountry}
               onChange={handleChange}
-              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+              placeholder="Enter agency country"
+              className="p-3 text-viridian-900 dark:text-white bg-white/0 backdrop-blur-sm 
+                border border-white/20 rounded-xl focus:border-viridian-500 focus:ring-2 
+                focus:ring-viridian-200 transition w-full"
             />
           </div>
 
+          {/* Client Country */}
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">
+            <label className="mb-2 text-sm font-medium text-viridian-800 dark:text-gray-200">
               Client Country
             </label>
             <input
@@ -148,14 +108,19 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               name="clientCountry"
               value={formData.clientCountry}
               onChange={handleChange}
-              className="p-3 text-black border border-gray-300 rounded-xl focus:border-viridian-500 focus:ring-2 focus:ring-viridian-200 transition w-full"
+              placeholder="Enter client country"
+              className="p-3 text-viridian-900 dark:text-white bg-white/0 backdrop-blur-sm 
+                border border-white/20 rounded-xl focus:border-viridian-500 focus:ring-2 
+                focus:ring-viridian-200 transition w-full"
             />
           </div>
         </div>
 
+        {/* Generate Button */}
         <button
-          className="bg-viridian-600 hover:bg-viridian-700 text-white font-semibold py-1 rounded-xl w-full transition-colors shadow-md text-lg"
-          onClick={onGenerate}>
+          onClick={onGenerate}
+          className="bg-viridian-600 hover:bg-viridian-700 text-white font-semibold 
+            py-3 rounded-xl w-full transition-all shadow-md text-lg">
           Generate Financial Plan
         </button>
       </div>

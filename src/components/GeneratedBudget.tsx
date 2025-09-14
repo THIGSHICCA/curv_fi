@@ -22,7 +22,7 @@ interface Props {
   }>;
   fundManagement: string;
   clientCurrency: string;
-  totalTeam?: number;
+  suggested_team_size?: number;
   totalCost?: number;
 }
 
@@ -41,7 +41,7 @@ const BudgetVisualization: React.FC<Props> = ({
   allocation_breakdown,
   fundManagement,
   clientCurrency,
-  totalTeam = 5,
+  suggested_team_size = 5,
   totalCost,
 }) => {
   const pieData = allocation_breakdown.map((item) => ({
@@ -56,47 +56,49 @@ const BudgetVisualization: React.FC<Props> = ({
   }));
 
   return (
-    <div className="ml-0 md:ml-10 mt-10 md:mt-0 w-full max-w-4xl p-6 bg-viridian-50 rounded-3xl shadow-xl transition-all duration-500">
+    <div
+      className="p-6 rounded-3xl shadow-xl transition-all duration-500
+                 bg-white/10 backdrop-blur-md border border-white/20">
       {/* Header */}
-      <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-center text-viridian-900">
+      <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-center text-viridian-50">
         Generated Budget
       </h2>
 
       {/* Budget & Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="p-5 bg-viridian-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
-          <p className="text-sm text-viridian-700 font-semibold">
-            Total Budget
-          </p>
-          <p className="text-2xl md:text-3xl font-bold text-viridian-900 mt-2">
+        <div
+          className="p-5 rounded-2xl shadow-md hover:shadow-lg transition-shadow 
+                        bg-white/0 backdrop-blur-sm border border-white/30">
+          <p className="text-sm text-viridian-50 font-semibold">Total Budget</p>
+          <p className="text-2xl md:text-3xl font-bold text-viridian-50 mt-2">
             {total_budget.min.toLocaleString()} -{" "}
             {total_budget.max.toLocaleString()} {clientCurrency}
           </p>
         </div>
 
-        <div className="p-5 bg-viridian-100 rounded-2xl shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow">
-          <div className="p-3 bg-viridian-200 text-viridian-900 rounded-full">
-            <FaUsers size={24} />
+        <div
+          className="p-5 rounded-2xl shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow 
+                        bg-white/0 backdrop-blur-sm border border-white/30">
+          <div className="p-3 bg-white/30 rounded-full shadow-sm">
+            <FaUsers size={24} className="text-viridian-50" />
           </div>
           <div>
-            <p className="text-sm text-viridian-700 font-semibold">
-              Total Team
-            </p>
-            <p className="text-xl md:text-2xl font-bold text-viridian-900">
-              {totalTeam}
+            <p className="text-sm text-viridian-50 font-semibold">Total Team</p>
+            <p className="text-xl md:text-2xl font-bold text-viridian-50">
+              {suggested_team_size}
             </p>
           </div>
         </div>
 
-        <div className="p-5 bg-viridian-100 rounded-2xl shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow">
-          <div className="p-3 bg-viridian-200 text-viridian-900 rounded-full">
-            <FaDollarSign size={24} />
+        <div
+          className="p-5 rounded-2xl shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow 
+                        bg-white/0 backdrop-blur-sm border border-white/30">
+          <div className="p-3 bg-white/30 rounded-full shadow-sm">
+            <FaDollarSign size={24} className="text-viridian-50" />
           </div>
           <div>
-            <p className="text-sm text-viridian-700 font-semibold">
-              Total Cost
-            </p>
-            <p className="text-xl md:text-2xl font-bold text-viridian-900">
+            <p className="text-sm text-viridian-50 font-semibold">Total Cost</p>
+            <p className="text-xl md:text-2xl font-bold text-viridian-50">
               {totalCost?.toLocaleString() || total_budget.max.toLocaleString()}{" "}
               {clientCurrency}
             </p>
@@ -117,8 +119,7 @@ const BudgetVisualization: React.FC<Props> = ({
                 innerRadius={60}
                 outerRadius={100}
                 paddingAngle={5}
-                label={false} // hide labels inside the pie
-              >
+                label={false}>
                 {pieData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
@@ -133,7 +134,7 @@ const BudgetVisualization: React.FC<Props> = ({
 
         {/* Custom Legend */}
         <div className="w-full md:w-1/3 flex flex-col justify-center gap-3">
-          <h3 className="font-semibold text-viridian-800 mb-2 text-lg">
+          <h3 className="font-semibold text-viridian-50 mb-2 text-lg">
             Categories
           </h3>
           {allocation_breakdown.map((item, index) => (
@@ -143,7 +144,7 @@ const BudgetVisualization: React.FC<Props> = ({
                 style={{
                   backgroundColor: COLORS[index % COLORS.length],
                 }}></div>
-              <p className="text-viridian-700 font-medium">
+              <p className="text-viridian-50 font-medium">
                 {item.category} ({item.percentage}%)
               </p>
             </div>
@@ -152,20 +153,35 @@ const BudgetVisualization: React.FC<Props> = ({
       </div>
 
       {/* Bar Chart */}
-      <ResponsiveContainer width="100%" height={250}>
-        <BarChart
-          data={barData}
-          margin={{ top: 20, right: 20, bottom: 0, left: 0 }}>
-          <XAxis dataKey="category" tick={{ fill: "#065F46" }} />
-          <YAxis tick={{ fill: "#065F46" }} />
-          <Tooltip />
-          <Bar dataKey="min" stackId="a" fill="#34D399" radius={[5, 5, 0, 0]} />
-          <Bar dataKey="max" stackId="a" fill="#059669" radius={[5, 5, 0, 0]} />
-        </BarChart>
-      </ResponsiveContainer>
+      <div className=" backdrop-blur-sm border border-white/30 p-4 rounded-2xl shadow-inner">
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart
+            data={barData}
+            margin={{ top: 20, right: 20, bottom: 0, left: 0 }}>
+            <XAxis dataKey="category" tick={{ fill: "#fff" }} />
+            <YAxis tick={{ fill: "#fff" }} />
+            <Tooltip />
+            <Bar
+              dataKey="min"
+              stackId="a"
+              fill="#34D399"
+              radius={[5, 5, 0, 0]}
+            />
+            <Bar
+              dataKey="max"
+              stackId="a"
+              fill="#059669"
+              radius={[5, 5, 0, 0]}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
 
       {/* Fund Management Advice */}
-      <div className="p-5 bg-viridian-50/80 rounded-2xl border border-viridian-200 shadow-inner text-viridian-800 text-base mt-6">
+      <div
+        className="p-5 mt-6 rounded-2xl shadow-inner 
+                      bg-gradient-to-r from-viridian-400/20 to-viridian-950/30 backdrop-blur-sm border border-white/30 
+                      text-viridian-50 text-base">
         <p className="font-semibold mb-2">Fund Management Advice:</p>
         <p>{fundManagement}</p>
       </div>
