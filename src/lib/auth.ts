@@ -13,17 +13,17 @@ export function createToken(userId: string) {
   return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: "7d" });
 }
 
-// Reset daily coins if a new day
+// Reset coins if 24 hours have passed since last reset
 export async function resetCoinsIfNeeded(user: IUserDocument) {
   const now = new Date();
-  const last = new Date(user.lastRequest);
+  const lastReset = user.lastReset || new Date(0); // fallback if never set
 
-  if (
-    now.getUTCFullYear() !== last.getUTCFullYear() ||
-    now.getUTCMonth() !== last.getUTCMonth() ||
-    now.getUTCDate() !== last.getUTCDate()
-  ) {
-    user.coins = 3; // reset daily limit
+  const hoursSinceLastReset =
+    (now.getTime() - lastReset.getTime()) / (1000 * 60 * 60);
+
+  if (hoursSinceLastReset >= 24) {
+    user.coins = 3; // reset daily coins
+    user.lastReset = now;
     await user.save();
   }
 }
@@ -34,12 +34,12 @@ export async function checkCoins(userId: string) {
   const user = (await User.findById(userId)) as IUserDocument;
   if (!user) throw new Error("User not found");
 
+  // Reset coins every 24 hours
   await resetCoinsIfNeeded(user);
 
   if (user.coins <= 0) throw new Error("No credits left today");
 
   user.coins -= 1;
-  user.lastRequest = new Date();
   await user.save();
 
   return user.coins;

@@ -1,13 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BackgroundEffects from "@/components/BackgroundEffect";
 import BudgetInput from "@/components/BudgetInput";
 import BudgetVisualization from "@/components/GeneratedBudget";
 import DashboardHeaderMinimal from "@/components/DashboardHeader";
 import BudgetPlaceholder from "@/components/BudgetPlaceholder";
-import { FullscreenLoader } from "@/components/Loader"; // import loader
+import { FullscreenLoader } from "@/components/Loader";
 
 export default function DashboardPage() {
+  // Hooks called unconditionally
+  const [isClient, setIsClient] = useState(false);
   const [showBudget, setShowBudget] = useState(false);
   const [formData, setFormData] = useState({
     requirements: "",
@@ -20,6 +22,11 @@ export default function DashboardPage() {
   });
   const [budgetOutput, setBudgetOutput] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+
+  // Effect
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleGenerateBudget = async () => {
     setLoading(true);
@@ -61,24 +68,24 @@ export default function DashboardPage() {
     window.location.href = "/";
   };
 
+  // Render only on client
+  if (!isClient) return null;
+
   return (
     <div>
       <BackgroundEffects />
 
       <div className="min-h-screen z-10 items-center py-10 transition-all duration-500 relative">
         <div className="container mx-auto flex flex-col md:flex-row gap-6">
-          {/* Left Side: Input */}
           <BudgetInput
             formData={formData}
             setFormData={setFormData}
             onGenerate={handleGenerateBudget}
           />
 
-          {/* Right Side: Header + Output */}
           <div className="flex-1 flex flex-col gap-4">
             <DashboardHeaderMinimal onLogout={handleLogout} />
 
-            {/* Show states */}
             {!showBudget && <BudgetPlaceholder />}
 
             {showBudget && budgetOutput && (
@@ -87,13 +94,12 @@ export default function DashboardPage() {
                 allocation_breakdown={budgetOutput.allocation_breakdown}
                 fundManagement={budgetOutput.fundManagement}
                 clientCurrency={budgetOutput.clientCurrency}
-                suggested_team_size={budgetOutput.suggested_team_size} // ✅ from backend
+                suggested_team_size={budgetOutput.suggested_team_size}
               />
             )}
           </div>
         </div>
 
-        {/* Fullscreen Loader Overlay */}
         {loading && <FullscreenLoader message="Calculating budget..." />}
       </div>
     </div>
