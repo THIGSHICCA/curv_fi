@@ -46,6 +46,7 @@ export default function AuthForm({ isLogin }: AuthFormProps) {
         setError(data.error || "Something went wrong");
       } else {
         setToken(data.token);
+        localStorage.setItem("token", data.token); // ✅ Store token
         setCoins(data.coins);
         router.push("/dashboard");
       }

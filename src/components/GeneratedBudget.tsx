@@ -1,118 +1,176 @@
-'use client';
+"use client";
+import React from "react";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  BarChart,
+  XAxis,
+  YAxis,
+  Bar,
+} from "recharts";
+import { FaUsers, FaDollarSign } from "react-icons/fa";
 
-import React from 'react';
-import { BiDollar, BiEuro, BiRupee, BiPound, BiMoney, BiGroup } from 'react-icons/bi';
-import BudgetBarChart from './BarChart';
-
-interface AmountRange { min: number; max: number; }
-interface Allocation { category: string; amount: AmountRange; percentage: AmountRange; }
-interface FundManagementDetail { min: number; max: number; description: string; }
-interface FundManagement { upfront?: FundManagementDetail; milestone?: FundManagementDetail; advice?: string; }
-
-interface GeneratedBudgetProps {
-  budgetCurrency?: string;
-  total_budget?: AmountRange;
-  allocation_breakdown?: Allocation[];
-  suggested_team_size?: number;
-  fundManagement?: FundManagement;
-  projectRequirement?: string;
-  agencyCountry?: string;
-  clientCountry?: string;
+interface Props {
+  total_budget: { min: number; max: number };
+  allocation_breakdown: Array<{
+    category: string;
+    amount: { min: number; max: number };
+    percentage: number;
+  }>;
+  fundManagement: string;
+  clientCurrency: string;
+  totalTeam?: number;
+  totalCost?: number;
 }
 
-const GeneratedBudget: React.FC<GeneratedBudgetProps> = ({
-  budgetCurrency = "USD",
-  total_budget,
-  allocation_breakdown = [],
-  suggested_team_size = 1,
-  fundManagement = {},
-  projectRequirement = "",
-  agencyCountry = "",
-  clientCountry = "",
-}) => {
-  const { upfront, milestone, advice } = fundManagement;
+const COLORS = [
+  "#059669",
+  "#10B981",
+  "#34D399",
+  "#6EE7B7",
+  "#A7F3D0",
+  "#047857",
+  "#065F46",
+];
 
-  const renderCurrencyIcon = () => {
-    switch (budgetCurrency.toUpperCase()) {
-      case "USD": return <BiDollar className="inline mr-1" />;
-      case "EUR": return <BiEuro className="inline mr-1" />;
-      case "INR": return <BiRupee className="inline mr-1" />;
-      case "GBP": return <BiPound className="inline mr-1" />;
-      default: return <span className="inline mr-1">{budgetCurrency}</span>;
-    }
-  };
+const BudgetVisualization: React.FC<Props> = ({
+  total_budget,
+  allocation_breakdown,
+  fundManagement,
+  clientCurrency,
+  totalTeam = 5,
+  totalCost,
+}) => {
+  const pieData = allocation_breakdown.map((item) => ({
+    name: item.category,
+    value: item.percentage,
+  }));
+
+  const barData = allocation_breakdown.map((item) => ({
+    category: item.category,
+    min: item.amount.min,
+    max: item.amount.max,
+  }));
 
   return (
-    <div className="bg-gradient-to-br from-viridian-50 to-viridian-200 text-gray-900 p-4 md:p-6 rounded-3xl shadow-2xl border border-gray-200 max-w-3xl mx-auto m-2">
-      {/* Title */}
-      <h2 className="text-3xl md:text-4xl font-extrabold mb-5 text-center text-viridian-900 p-6">
-        Generated Budget Plan
+    <div className="ml-0 md:ml-10 mt-10 md:mt-0 w-full max-w-4xl p-6 bg-viridian-50 rounded-3xl shadow-xl transition-all duration-500">
+      {/* Header */}
+      <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-center text-viridian-900">
+        Generated Budget
       </h2>
 
-      {/* Total Budget & Team Size */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-2 mb-2 ">
-        {/* Total Budget */}
-        <div className="flex flex-col items-center bg-white/80 p-3 rounded-xl mx-auto text-center">
-          <span className="font-medium text-lg flex items-center gap-2 mb-1">
-            <BiMoney className="text-viridian-700 text-4xl " /> 
-          </span>
-          <span className="font-bold text-viridian-800 text-xl">
-            {renderCurrencyIcon()}{total_budget?.min?.toLocaleString()} – {renderCurrencyIcon()}{total_budget?.max?.toLocaleString()}
-          </span>
+      {/* Budget & Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="p-5 bg-viridian-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
+          <p className="text-sm text-viridian-700 font-semibold">
+            Total Budget
+          </p>
+          <p className="text-2xl md:text-3xl font-bold text-viridian-900 mt-2">
+            {total_budget.min.toLocaleString()} -{" "}
+            {total_budget.max.toLocaleString()} {clientCurrency}
+          </p>
         </div>
 
-        {/* Suggested Team Size */}
-        <div className="flex justify-between items-center bg-white/80 p-5 rounded-xl shadow mx-auto">
-          <span className="font-medium flex items-center gap-2">
-            <BiGroup className="text-viridian-700 text-2xl" />
-            : {suggested_team_size}
-          </span>
+        <div className="p-5 bg-viridian-100 rounded-2xl shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow">
+          <div className="p-3 bg-viridian-200 text-viridian-900 rounded-full">
+            <FaUsers size={24} />
+          </div>
+          <div>
+            <p className="text-sm text-viridian-700 font-semibold">
+              Total Team
+            </p>
+            <p className="text-xl md:text-2xl font-bold text-viridian-900">
+              {totalTeam}
+            </p>
+          </div>
+        </div>
+
+        <div className="p-5 bg-viridian-100 rounded-2xl shadow-md flex items-center gap-3 hover:shadow-lg transition-shadow">
+          <div className="p-3 bg-viridian-200 text-viridian-900 rounded-full">
+            <FaDollarSign size={24} />
+          </div>
+          <div>
+            <p className="text-sm text-viridian-700 font-semibold">
+              Total Cost
+            </p>
+            <p className="text-xl md:text-2xl font-bold text-viridian-900">
+              {totalCost?.toLocaleString() || total_budget.max.toLocaleString()}{" "}
+              {clientCurrency}
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Project Info */}
-      {(projectRequirement || agencyCountry || clientCountry) && (
-        <div className="bg-white/70 p-4 rounded-xl shadow mb-2">
-          {projectRequirement && <p><span className="font-medium">Project Requirement:</span> {projectRequirement}</p>}
-          {agencyCountry && <p><span className="font-medium">Agency Country:</span> {agencyCountry}</p>}
-          {clientCountry && <p><span className="font-medium">Client Country:</span> {clientCountry}</p>}
+      {/* Charts */}
+      <div className="flex flex-col md:flex-row gap-8 justify-center items-start mb-8">
+        {/* Pie Chart */}
+        <div className="w-full md:w-2/3">
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={5}
+                label={false} // hide labels inside the pie
+              >
+                {pieData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
-      )}
 
-      {/* Allocation Breakdown */}
-      {allocation_breakdown.length > 0 && (
-        <BudgetBarChart allocation_breakdown={allocation_breakdown} budgetCurrency={budgetCurrency} />
-      )}
-
-      {/* Fund Management */}
-      {(upfront || milestone || advice) && (
-        <div className="mt-6">
-          <h3 className="text-xl text-center font-semibold mb-2 text-viridian-800">Fund Management</h3>
-
-          {upfront && (
-            <div className="bg-white/70 p-4 rounded-xl shadow mb-2 border border-gray-200">
-              {renderCurrencyIcon()} {upfront.min.toLocaleString()} - {renderCurrencyIcon()} {upfront.max.toLocaleString()}
-              <p className="text-gray-700 mt-1">{upfront.description}</p>
+        {/* Custom Legend */}
+        <div className="w-full md:w-1/3 flex flex-col justify-center gap-3">
+          <h3 className="font-semibold text-viridian-800 mb-2 text-lg">
+            Categories
+          </h3>
+          {allocation_breakdown.map((item, index) => (
+            <div key={item.category} className="flex items-center gap-3">
+              <div
+                className="w-5 h-5 rounded-full"
+                style={{
+                  backgroundColor: COLORS[index % COLORS.length],
+                }}></div>
+              <p className="text-viridian-700 font-medium">
+                {item.category} ({item.percentage}%)
+              </p>
             </div>
-          )}
-
-          {milestone && (
-            <div className="bg-white/70 p-4 rounded-xl shadow mb-3 border border-gray-200">
-              {renderCurrencyIcon()} {milestone.min.toLocaleString()} - {renderCurrencyIcon()} {milestone.max.toLocaleString()}
-              <p className="text-gray-700 mt-1">{milestone.description}</p>
-            </div>
-          )}
-
-          {advice && (
-            <div className="bg-white/70 p-4 rounded-xl shadow border border-gray-200 mt-3">
-              <span className="font-medium">Advice / Notes:</span>
-              <p className="text-gray-700 mt-1">{advice}</p>
-            </div>
-          )}
+          ))}
         </div>
-      )}
+      </div>
+
+      {/* Bar Chart */}
+      <ResponsiveContainer width="100%" height={250}>
+        <BarChart
+          data={barData}
+          margin={{ top: 20, right: 20, bottom: 0, left: 0 }}>
+          <XAxis dataKey="category" tick={{ fill: "#065F46" }} />
+          <YAxis tick={{ fill: "#065F46" }} />
+          <Tooltip />
+          <Bar dataKey="min" stackId="a" fill="#34D399" radius={[5, 5, 0, 0]} />
+          <Bar dataKey="max" stackId="a" fill="#059669" radius={[5, 5, 0, 0]} />
+        </BarChart>
+      </ResponsiveContainer>
+
+      {/* Fund Management Advice */}
+      <div className="p-5 bg-viridian-50/80 rounded-2xl border border-viridian-200 shadow-inner text-viridian-800 text-base mt-6">
+        <p className="font-semibold mb-2">Fund Management Advice:</p>
+        <p>{fundManagement}</p>
+      </div>
     </div>
   );
 };
 
-export default GeneratedBudget;
+export default BudgetVisualization;
