@@ -8,7 +8,7 @@ import { FaUsers } from "react-icons/fa";
 export default function Hero() {
   const router = useRouter();
 
-  const finalCount = 120; // Final active users
+  const finalCount = 20; // Final active users
   const [count, setCount] = useState(0);
 
   // Animate number on mount

@@ -4,7 +4,6 @@ import { useState } from "react";
 import AuthForm from "@/components/AuthForm";
 import BackgroundEffects from "@/components/BackgroundEffect";
 
-import { motion } from "framer-motion";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
